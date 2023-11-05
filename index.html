@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Library Mangement System</title>
+ 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<style>
+  @media (max-width: 576px) {
+    .flex-reverse {
+      flex-direction: column-reverse;
+    }
+  }
+</style>
+  </head>
+<body class="bg-body-secondary">
+    
+    <section class="h-100 w-100">
+        <div class="container py-5 d-flex flex-column  shadow-lg p-3 mb-5 bg-white rounded  " style="margin:5.5rem auto">
+          <h1>Online Libray Mangement System</h1>
+         
+          <div class="flex-reverse row row-cols-1 row-cols-md-3 g-3  mt-3  d-flex justify-content-between " >
+          
+            <div class="col" >
+            <h2>Book List</h2>
+            <ol id="list">
+                
+                
+            </ol>
+            </div>
+            <div class="col" >
+              <h2>Add New Book</h2>
+              <div class="row d-flex gap-3 ">
+                <input type="text" class="form-control w-50" placeholder="title" id="title" aria-label="First name" value="">
+                <input type="text" class="form-control w-50" placeholder="author" id="author" aria-label="First name" value>
+                <input type="text" class="form-control w-50" placeholder="isbn"  id="isbn" aria-label="First name" value="">
+                <button type="button" class="btn btn-primary w-50" id="addbook">Add Book</button>
+              </div>
+              </div>
+            
+            <div class="col">
+            <h2>Search Book</h2>
+            <div class="row d-flex gap-3">
+              <div class="row d-flex gap-3 ">
+                <input type="text" class="form-control w-50" placeholder="Search Book" aria-label="First name" id="searchBook">
+                <button type="button" class="btn btn-primary w-50" id="findbook">Search</button>
+                <ul>
+                  <li type="none" id="showBook"></li>
+                </ul>
+              </div>
+            </div>
+           
+            </div>   
+          </div>
+  
+        </div>
+      </section>
+      <script>
+
+      let bookarray=[]
+
+      function createBookObject(title,author,isbn){
+        const book={
+          title:title,
+          author:author,
+          isbn:isbn
+          }
+
+          bookarray.push(book)
+          console.log(bookarray)
+      
+      }
+
+
+
+      
+
+
+      //function to check is book exist
+      function isDuplicate(isbn){
+
+        const isbookexist =bookarray.findIndex(book=>book.isbn===isbn)
+        if(isbookexist===-1){
+         return false
+        }
+        else{
+          return true
+        }
+        
+      }
+
+
+      //function show book
+      function showbook(e){
+        const Book=searchBook(e) //this function will return book index if book exist
+        if(Book===-1){
+          alert("book not found")
+        }
+        else{
+          const book=bookarray[Book]
+          const bookinfo=`${book.title} by ${book.author} isbn:${book.isbn}`
+          document.getElementById("showBook").innerText=bookinfo
+          document.getElementById("showBook").type="disc"
+        }
+      }
+
+      //function to search book and display
+      function searchBook(e){
+        e.preventDefault();
+        const searchBook=document.getElementById("searchBook").value
+        const bookindex =bookarray.findIndex(book=>book.title===searchBook)
+        if(bookindex===-1){
+          return -1
+        }
+        else{
+          return bookindex
+        }
+      }
+        //add list item 
+        function addListItem(book,isbn){
+        const isTrue=  isDuplicate(isbn)
+        if(!isTrue){
+          const listitem=document.getElementById("list")
+          const li=document.createElement("li")
+          li.innerText=book
+          list.appendChild(li)
+
+          document.getElementById("title").value = "";
+    document.getElementById("author").value = "";
+    document.getElementById("isbn").value = "";
+        }
+        else{
+          alert("book already exist")
+        }
+
+        
+       
+
+        }
+
+        function getValue(e){
+          e.preventDefault();
+         
+          var title = document.getElementById("title").value;
+          var author = document.getElementById("author").value;
+          var isbn = document.getElementById("isbn").value;
+  
+          const book=`${title} by ${author} isbn:${isbn}`
+          addListItem(book,isbn)
+          createBookObject(title,author,isbn)
+          
+        }
+
+        
+        const addbook=document.getElementById("addbook")
+        addbook.addEventListener("click",getValue)
+
+        const findbook=document.getElementById("findbook")
+        findbook.addEventListener("click",showbook)
+      </script>
+    
+</body>
+</html>
